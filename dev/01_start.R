@@ -1,0 +1,58 @@
+########################################
+#### CURRENT FILE: ON START SCRIPT #####
+########################################
+
+golem::fill_desc(
+  pkg_name = "shinyrealtime",
+  pkg_title = "Demonstration of Shiny Realtime",
+  pkg_description = "Shiny Realtime is a demonstration of how to use Shiny with Realtime features.",
+  authors = person(
+    given = "Arthur",
+    family = "Bréant",
+    email = "arthur@gmail.com",
+    role = c("aut", "cre")
+  ),
+  repo_url = NULL,
+  pkg_version = "0.0.0.9000",
+  set_options = TRUE
+)
+
+## Install the required dev dependencies ----
+golem::install_dev_deps()
+
+## Create Common Files ----
+## See ?usethis for more information
+usethis::use_mit_license("Arthur Bréant")
+golem::use_readme_rmd(open = TRUE)
+devtools::build_readme()
+# Note that `contact` is required since usethis version 2.1.5
+# If your {usethis} version is older, you can remove that param
+usethis::use_code_of_conduct(contact = "contact@thinkr.fr")
+usethis::use_lifecycle_badge("Experimental")
+usethis::use_news_md(open = FALSE)
+
+## Init Testing Infrastructure ----
+## Create a template for tests
+golem::use_recommended_tests()
+
+## Favicon ----
+# If you want to change the favicon (default is golem's one)
+golem::use_favicon() # path = "path/to/ico". Can be an online file.
+# golem::remove_favicon() # Uncomment to remove the default favicon
+
+## Add helper functions ----
+golem::use_utils_ui(with_test = TRUE)
+golem::use_utils_server(with_test = TRUE)
+
+## Use git ----
+usethis::use_git()
+## Sets the remote associated with 'name' to 'url'
+usethis::use_git_remote(
+  name = "origin",
+  url = "https://github.com/<OWNER>/<REPO>.git"
+)
+
+# You're now set! ----
+
+# go to dev/02_dev.R
+rstudioapi::navigateToFile("dev/02_dev.R")

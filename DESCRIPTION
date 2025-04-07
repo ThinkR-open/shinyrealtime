@@ -1,0 +1,21 @@
+Package: shinyrealtime
+Title: Demonstration of Shiny Realtime
+Version: 0.0.0.9000
+Authors@R: 
+    person("Arthur", "Bréant", , "arthur@gmail.com", role = c("aut", "cre"))
+Description: Shiny Realtime is a demonstration of how to use Shiny with
+    Realtime features.
+License: MIT + file LICENSE
+Imports: 
+    bslib,
+    config,
+    golem,
+    reactable,
+    shiny,
+    whereami
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.2

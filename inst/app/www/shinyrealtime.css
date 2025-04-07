@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+.navbar {
+  background-color: #f1f4fa;
+
+  .navbar-brand {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+
+ .navbar-users {
+   display: flex;
+   gap: 3px;
+
+   .avatar {
+     display: inline-flex;
+     justify-content: center;
+     align-items: center;
+     width: 25px;
+     height: 25px;
+     border-radius: 50%;
+     font-weight: bold;
+     color: #fff;
+   }
+ }
+}
+
+
+
