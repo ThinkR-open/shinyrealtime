@@ -14,9 +14,8 @@ mod_navbar_ui <- function(id) {
       class = "navbar navbar-light",
       div(
         class = "container-fluid",
-        a(
+        span(
           class = "navbar-brand",
-          href = "/",
           "Shiny Realtime"
         ),
         div(
@@ -38,6 +37,9 @@ mod_navbar_server <- function(id, rv) {
     ns <- session$ns
 
     observeEvent(TRUE, {
+      message("Connected user:")
+      message(Sys.getenv("USER"))
+      message(session$user)
       rv$connected_users <- c("Alice", "Bob", "Charlie", "David", "Eve", "Frank", "Grace", "Heidi", "Ivan", "Judy")
     })
 
