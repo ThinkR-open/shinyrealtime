@@ -10,6 +10,7 @@ Imports:
     bslib,
     config,
     golem,
+    pkgload,
     reactable,
     shiny,
     whereami
