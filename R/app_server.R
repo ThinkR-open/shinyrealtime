@@ -137,7 +137,7 @@ app_server <- function(input, output, session) {
     }
   })
 
-  observeEvent(c(input$user_inactive, rv$user_disconnect), {
+  observeEvent(input$user_inactive, {
     cat_where(whereami())
 
     showModal(modalDialog(

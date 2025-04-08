@@ -17,10 +17,12 @@ let timeout;
 function resetTimer() {
 
   clearTimeout(timeout);
+  console.log("🕒 Timer réinitialisé");
 
   timeout = setTimeout(function() {
-    Shiny.setInputValue("user_inactive", true);
-  }, 60000);
+    console.log("🕒 Timer expiré, utilisateur inactif");
+    Shiny.setInputValue("user_inactive", true, { priority: "event" });
+  }, 30000);
 }
 
 document.addEventListener("mousemove", resetTimer);
