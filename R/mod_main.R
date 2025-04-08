@@ -15,12 +15,17 @@ mod_main_ui <- function(id) {
       class = "mt-5 mb-3",
       div(
         class = "container",
-        mod_action_button_ui(
+        div(
+          class = "mb-3",
+          mod_action_button_ui(
           id = ns("action_button")
+          )
         ),
-        reactableOutput(ns("table")),
+        reactableOutput(
+          outputId = ns("table")
+        ),
         mod_offcanvas_ui(
-          id = ns("offcanvas")
+            id = ns("offcanvas")
         )
       )
     )
@@ -46,7 +51,7 @@ mod_main_server <- function(id, rv) {
 
     output$table <- renderReactable({
       reactable::reactable(
-        data = rv$data
+        data = head(iris)
       )
     })
 

@@ -36,11 +36,10 @@ mod_navbar_server <- function(id, rv) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
-    observeEvent(TRUE, {
-      message("Connected user:")
-      message(Sys.getenv("USER"))
-      message(session$user)
-      rv$connected_users <- c("Alice", "Bob", "Charlie", "David", "Eve", "Frank", "Grace", "Heidi", "Ivan", "Judy")
+    observeEvent(rv$users, {
+      rv$connected_users <- rv$users |>
+        filter(is_connected == TRUE) |>
+        pull(name)
     })
 
     output$avatars <- renderUI({
@@ -53,6 +52,7 @@ mod_navbar_server <- function(id, rv) {
 
           span(
             class = "avatar",
+            title = user,
             style = paste0(
               "background-color: ", random_color, ";"
             ),

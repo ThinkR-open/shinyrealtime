@@ -9,8 +9,10 @@ License: MIT + file LICENSE
 Imports: 
     bslib,
     config,
+    dplyr,
     golem,
-    pkgload,
+    httr,
+    jsonlite,
     reactable,
     shiny,
     whereami

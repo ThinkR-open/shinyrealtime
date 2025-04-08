@@ -8,9 +8,7 @@
 #' @noRd
 app_ui <- function(request) {
   tagList(
-    # Leave this function for adding external resources
     golem_add_external_resources(),
-    # Your application UI logic
     page(
       theme = bs_theme(
         primary = "#f1f4fa",
@@ -38,11 +36,12 @@ golem_add_external_resources <- function() {
 
   tags$head(
     favicon(),
+    tags$script(
+      src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ),
     bundle_resources(
       path = app_sys("app/www"),
       app_title = "shinyrealtime"
     )
-    # Add here other external resources
-    # for example, you can add shinyalert::useShinyalert()
   )
 }
