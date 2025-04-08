@@ -3,7 +3,7 @@ Shiny.addCustomMessageHandler("supabaseConfig", function(config) {
   console.log("🔗 Connexion à Supabase WebSocket...");
 
   const supabase = window.supabase.createClient(config.url, config.key);
-  console.log(config.key);
+
   supabase
     .channel('public:users')
     .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'users' }, payload => {
@@ -25,3 +25,7 @@ document.addEventListener("mousemove", resetTimer);
 document.addEventListener("keydown", resetTimer);
 document.addEventListener("click", resetTimer);
 resetTimer();
+
+document.addEventListener("beforeunload", function() {
+  Shiny.setInputValue("user_disconnect", true);
+});
