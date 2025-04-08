@@ -105,38 +105,38 @@ app_server <- function(input, output, session) {
   })
 
 
-  session$onSessionEnded(function() {
-    cat_where(whereami())
-
-    if (getOption("golem.app.prod")) {
-
-      body <- jsonlite::toJSON(
-        list(
-          is_connected = FALSE
-        ),
-        auto_unbox = TRUE
-      )
-
-      response <- httr::PATCH(
-        url = paste0(rv$supabase_url, "/rest/v1/users?", "name=eq.", rv$connected_user),
-        httr::add_headers(
-          "apikey" = rv$supabase_key,
-          "Content-Type" = "application/json",
-          "Prefer" = "return=representation"
-        ),
-        body = body,
-        encode = "json"
-      )
-
-    } else {
-      rv$users <- data.frame(
-        id = c(1, 2, 3),
-        name = c("user1", "user2", "user3"),
-        is_connected = c(FALSE, FALSE, FALSE),
-        is_first_visit = c(FALSE, FALSE, FALSE)
-      )
-    }
-  })
+  # session$onSessionEnded(function() {
+  #   cat_where(whereami())
+  #
+  #   if (getOption("golem.app.prod")) {
+  #
+  #     body <- jsonlite::toJSON(
+  #       list(
+  #         is_connected = FALSE
+  #       ),
+  #       auto_unbox = TRUE
+  #     )
+  #
+  #     response <- httr::PATCH(
+  #       url = paste0(rv$supabase_url, "/rest/v1/users?", "name=eq.", rv$connected_user),
+  #       httr::add_headers(
+  #         "apikey" = rv$supabase_key,
+  #         "Content-Type" = "application/json",
+  #         "Prefer" = "return=representation"
+  #       ),
+  #       body = body,
+  #       encode = "json"
+  #     )
+  #
+  #   } else {
+  #     rv$users <- data.frame(
+  #       id = c(1, 2, 3),
+  #       name = c("user1", "user2", "user3"),
+  #       is_connected = c(FALSE, FALSE, FALSE),
+  #       is_first_visit = c(FALSE, FALSE, FALSE)
+  #     )
+  #   }
+  # })
 
   observeEvent(input$user_inactive, {
     cat_where(whereami())

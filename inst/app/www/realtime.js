@@ -3,7 +3,7 @@ Shiny.addCustomMessageHandler("supabaseConfig", function(config) {
   console.log("🔗 Connexion à Supabase WebSocket...");
 
   const supabase = window.supabase.createClient(config.url, config.key);
-
+  console.log(config.key);
   supabase
     .channel('public:users')
     .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'users' }, payload => {
@@ -18,7 +18,7 @@ function resetTimer() {
   clearTimeout(timeout);
   timeout = setTimeout(function() {
     Shiny.setInputValue("user_inactive", true);
-  }, 6000);
+  }, 180000);
 }
 
 document.addEventListener("mousemove", resetTimer);
