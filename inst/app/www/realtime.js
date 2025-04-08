@@ -25,7 +25,3 @@ document.addEventListener("mousemove", resetTimer);
 document.addEventListener("keydown", resetTimer);
 document.addEventListener("click", resetTimer);
 resetTimer();
-
-document.addEventListener("beforeunload", function() {
-  Shiny.setInputValue("user_disconnect", true);
-});
