@@ -15,10 +15,12 @@ Shiny.addCustomMessageHandler("supabaseConfig", function(config) {
 
 let timeout;
 function resetTimer() {
+
   clearTimeout(timeout);
+
   timeout = setTimeout(function() {
     Shiny.setInputValue("user_inactive", true);
-  }, 180000);
+  }, 60000);
 }
 
 document.addEventListener("mousemove", resetTimer);
