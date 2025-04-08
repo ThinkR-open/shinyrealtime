@@ -117,7 +117,7 @@ app_server <- function(input, output, session) {
       )
 
       response <- httr::PATCH(
-        url = paste0(rv$supabase_url, "/rest/v1/users?", "name=eq.", isolate(rv$connected_user)),
+        url = paste0(isolate(rv$supabase_url), "/rest/v1/users?", "name=eq.", isolate(rv$connected_user)),
         httr::add_headers(
           "apikey" = isolate(rv$supabase_key),
           "Content-Type" = "application/json",
