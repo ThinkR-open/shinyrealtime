@@ -3,7 +3,7 @@
 #' @param input,output,session Internal parameters for {shiny}.
 #'     DO NOT REMOVE.
 #' @import shiny
-#' @importFrom dplyr filter pull tibble
+#' @importFrom dplyr filter pull tibble distinct
 #' @noRd
 app_server <- function(input, output, session) {
 
@@ -25,19 +25,17 @@ app_server <- function(input, output, session) {
 
     if (getOption("golem.app.prod")) {
 
-      rv$connected_user <- session$user
-
       body <- jsonlite::toJSON(
         list(
-          name = rv$connected_user,
+          user_name = session$user,
           is_connected = TRUE,
-          is_first_visit = FALSE
+          token = session$token
         ),
         auto_unbox = TRUE
       )
 
-      response <- httr::PATCH(
-        url = paste0(rv$supabase_url, "/rest/v1/users?", "name=eq.", rv$connected_user),
+      response <- httr::POST(
+        url = paste0(rv$supabase_url, "/rest/v1/userConnections?"),
         httr::add_headers(
           "apikey" = rv$supabase_key,
           "Content-Type" = "application/json",
@@ -47,14 +45,13 @@ app_server <- function(input, output, session) {
         encode = "json"
       )
 
-    } else {
-      rv$connected_user <- Sys.getenv("USER")
+      rv$current_user <- jsonlite::fromJSON(rawToChar(response$content))
     }
 
     if (getOption("golem.app.prod")) {
 
       response <- httr::GET(
-        url = paste0(rv$supabase_url, "/rest/v1/users"),
+        url = paste0(rv$supabase_url, "/rest/v1/userConnections"),
         httr::add_headers(
           "apikey" = rv$supabase_key,
           "Content-Type" = "application/json",
@@ -64,40 +61,37 @@ app_server <- function(input, output, session) {
         encode = "json"
       )
 
-      if (httr::status_code(response) == 200) {
-        rv$users <- jsonlite::fromJSON(rawToChar(response$content))
-      }
+      rv$user_connections <- jsonlite::fromJSON(rawToChar(response$content))
 
     } else {
-      rv$users <- data.frame(
+      rv$user_connections <- data.frame(
         id = c(1, 2, 3),
-        name = c("user1", "user2", "user3"),
-        is_connected = c(TRUE, FALSE, FALSE),
-        is_first_visit = c(FALSE, FALSE, FALSE)
+        user_name = c("user1", "user2", "user3"),
+        is_connected = c(TRUE, FALSE, FALSE)
       )
     }
   })
 
-  observeEvent(input$user_update, {
+  observeEvent(input$user_connection_update, {
     cat_where(whereami())
 
     if (getOption("golem.app.prod")) {
 
       new <- tibble(
-        id = input$user_update$new$id,
-        is_connected = input$user_update$new$is_connected,
+        id = input$user_connection_update$new$id,
+        is_connected = input$user_connection_update$new$is_connected,
       )
 
-      rv$users <- dplyr::rows_update(
-        rv$users,
+      rv$user_connections <- dplyr::rows_update(
+        rv$user_connections,
         new,
         by = "id"
       )
 
     } else {
-      rv$users <- data.frame(
+      rv$user_connections <- data.frame(
         id = c(1, 2, 3),
-        name = c("user1", "user2", "user3"),
+        user_name = c("user1", "user2", "user3"),
         is_connected = c(TRUE, FALSE, FALSE),
         is_first_visit = c(FALSE, FALSE, FALSE)
       )
@@ -113,7 +107,34 @@ app_server <- function(input, output, session) {
       easyClose = FALSE,
       footer = NULL
     ))
-    session$close()
+
+    if (getOption("golem.app.prod")) {
+      # body <- jsonlite::toJSON(
+      #   list(
+      #     is_connected = FALSE
+      #   ),
+      #   auto_unbox = TRUE
+      # )
+      #
+      # response <- httr::PATCH(
+      #   url = paste0(rv$supabase_url, "/rest/v1/userConnections?", "name=eq.", rv$current_user),
+      #   httr::add_headers(
+      #     "apikey" = rv$supabase_key,
+      #     "Content-Type" = "application/json",
+      #     "Prefer" = "return=representation"
+      #   ),
+      #   body = body,
+      #   encode = "json"
+      # )
+
+    } else {
+      rv$users <- data.frame(
+        id = c(1, 2, 3),
+        user_name = c("user1", "user2", "user3"),
+        is_connected = c(FALSE, FALSE, FALSE),
+        is_first_visit = c(FALSE, FALSE, FALSE)
+      )
+    }
   })
 
   session$onSessionEnded(function() {
@@ -121,28 +142,28 @@ app_server <- function(input, output, session) {
     isolate(rv$pouet)
 
     if (getOption("golem.app.prod")) {
-      body <- jsonlite::toJSON(
-        list(
-          is_connected = FALSE
-        ),
-        auto_unbox = TRUE
-      )
-
-      response <- httr::PATCH(
-        url = paste0(isolate(rv$supabase_url), "/rest/v1/users?", "name=eq.", isolate(rv$connected_user)),
-        httr::add_headers(
-          "apikey" = isolate(rv$supabase_key),
-          "Content-Type" = "application/json",
-          "Prefer" = "return=representation"
-        ),
-        body = body,
-        encode = "json"
-      )
+      # body <- jsonlite::toJSON(
+      #   list(
+      #     is_connected = FALSE
+      #   ),
+      #   auto_unbox = TRUE
+      # )
+      #
+      # response <- httr::PATCH(
+      #   url = paste0(isolate(rv$supabase_url), "/rest/v1/users?", "name=eq.", isolate(rv$current_user)),
+      #   httr::add_headers(
+      #     "apikey" = isolate(rv$supabase_key),
+      #     "Content-Type" = "application/json",
+      #     "Prefer" = "return=representation"
+      #   ),
+      #   body = body,
+      #   encode = "json"
+      # )
 
     } else {
       rv$users <- data.frame(
         id = c(1, 2, 3),
-        name = c("user1", "user2", "user3"),
+        user_name = c("user1", "user2", "user3"),
         is_connected = c(FALSE, FALSE, FALSE),
         is_first_visit = c(FALSE, FALSE, FALSE)
       )

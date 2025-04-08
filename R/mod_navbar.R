@@ -36,16 +36,17 @@ mod_navbar_server <- function(id, rv) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
-    observeEvent(rv$users, {
-      rv$connected_users <- rv$users |>
+    observeEvent(rv$user_connections, {
+      rv$user_connected <- rv$user_connections |>
         filter(is_connected == TRUE) |>
-        pull(name)
+        distinct(user_name) |>
+        pull()
     })
 
     output$avatars <- renderUI({
 
       lapply(
-        rv$connected_users,
+        rv$user_connected,
         function(user) {
 
           random_color <- generate_pastel_color(user)

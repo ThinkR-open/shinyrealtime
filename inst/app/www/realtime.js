@@ -5,10 +5,10 @@ Shiny.addCustomMessageHandler("supabaseConfig", function(config) {
   const supabase = window.supabase.createClient(config.url, config.key);
 
   supabase
-    .channel('public:users')
-    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'users' }, payload => {
+    .channel('public:userConnections')
+    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'userConnections' }, payload => {
       console.log('💬 Event realtime:', payload);
-      Shiny.setInputValue("user_update", payload, { priority: "event" });
+      Shiny.setInputValue("user_connection_update", payload, { priority: "event" });
     })
     .subscribe();
 });
