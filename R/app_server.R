@@ -14,6 +14,9 @@ app_server <- function(input, output, session) {
 
   observeEvent(TRUE, once = TRUE, {
     cat_where(whereami())
+    message("Starting app server...")
+    message(session$user)
+    message(session$token)
 
     session$sendCustomMessage(
       type = "supabaseConfig",
@@ -171,6 +174,7 @@ app_server <- function(input, output, session) {
 
   session$onSessionEnded(function() {
     cat_where(whereami())
+    message("Session ended!!")
 
     if (getOption("golem.app.prod")) {
       body <- jsonlite::toJSON(
@@ -196,6 +200,8 @@ app_server <- function(input, output, session) {
         body = body,
         encode = "json"
       )
+
+      cat(rawToChar(response$content), "\n")
 
     } else {
       rv$users <- data.frame(
