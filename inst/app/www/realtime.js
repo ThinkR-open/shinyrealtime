@@ -3,14 +3,27 @@ Shiny.addCustomMessageHandler("supabaseConfig", function(config) {
   console.log("🔗 Connexion à Supabase WebSocket...");
 
   const supabase = window.supabase.createClient(config.url, config.key);
+  const channel = supabase.channel('public:userConnections')
 
-  supabase
-    .channel('public:userConnections')
-    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'userConnections' }, payload => {
-      console.log('💬 Event realtime:', payload);
-      Shiny.setInputValue("user_connection_update", payload, { priority: "event" });
-    })
-    .subscribe();
+  channel.on('postgres_changes', {
+    event: 'INSERT',
+    schema: 'public',
+    table: 'userConnections'
+  }, payload => {
+    console.log('➕ Nouvelle connexion ajoutée', payload);
+    Shiny.setInputValue("user_connection_insert", payload, { priority: "event" });
+  })
+
+  channel.on('postgres_changes', {
+    event: 'UPDATE',
+    schema: 'public',
+    table: 'userConnections'
+  }, payload => {
+   console.log('🖊️️ Connexion mise à jour', payload);
+   Shiny.setInputValue("user_connection_update", payload, { priority: "event" });
+  })
+
+  channel.subscribe();
 });
 
 let timeout;

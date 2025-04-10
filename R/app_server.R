@@ -99,6 +99,31 @@ app_server <- function(input, output, session) {
     }
   })
 
+  observeEvent(input$user_connection_insert, {
+    cat_where(whereami())
+
+    if (getOption("golem.app.prod")) {
+
+      new <- as.data.frame(
+        input$user_connection_insert$new
+      )
+
+      rv$user_connections <- dplyr::rows_upsert(
+        rv$user_connections,
+        new,
+        by = "id"
+      )
+
+    } else {
+      rv$user_connections <- data.frame(
+        id = c(1, 2, 3),
+        user_name = c("user1", "user2", "user3"),
+        is_connected = c(TRUE, FALSE, FALSE),
+        is_first_visit = c(FALSE, FALSE, FALSE)
+      )
+    }
+  })
+
   observeEvent(input$user_inactive, {
     cat_where(whereami())
 
