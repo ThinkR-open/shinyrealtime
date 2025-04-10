@@ -109,23 +109,29 @@ app_server <- function(input, output, session) {
     ))
 
     if (getOption("golem.app.prod")) {
-      # body <- jsonlite::toJSON(
-      #   list(
-      #     is_connected = FALSE
-      #   ),
-      #   auto_unbox = TRUE
-      # )
-      #
-      # response <- httr::PATCH(
-      #   url = paste0(rv$supabase_url, "/rest/v1/userConnections?", "name=eq.", rv$current_user),
-      #   httr::add_headers(
-      #     "apikey" = rv$supabase_key,
-      #     "Content-Type" = "application/json",
-      #     "Prefer" = "return=representation"
-      #   ),
-      #   body = body,
-      #   encode = "json"
-      # )
+      body <- jsonlite::toJSON(
+        list(
+          is_connected = FALSE
+        ),
+        auto_unbox = TRUE
+      )
+
+      response <- httr::PATCH(
+        url = paste0(
+          rv$supabase_url,
+          "/rest/v1/userConnections?",
+          "name=eq.", rv$current_user$user_name,
+          "&",
+          "token=eq.", rv$current_user$token
+        ),
+        httr::add_headers(
+          "apikey" = rv$supabase_key,
+          "Content-Type" = "application/json",
+          "Prefer" = "return=representation"
+        ),
+        body = body,
+        encode = "json"
+      )
 
     } else {
       rv$users <- data.frame(
@@ -139,26 +145,31 @@ app_server <- function(input, output, session) {
 
   session$onSessionEnded(function() {
     cat_where(whereami())
-    isolate(rv$pouet)
 
     if (getOption("golem.app.prod")) {
-      # body <- jsonlite::toJSON(
-      #   list(
-      #     is_connected = FALSE
-      #   ),
-      #   auto_unbox = TRUE
-      # )
-      #
-      # response <- httr::PATCH(
-      #   url = paste0(isolate(rv$supabase_url), "/rest/v1/users?", "name=eq.", isolate(rv$current_user)),
-      #   httr::add_headers(
-      #     "apikey" = isolate(rv$supabase_key),
-      #     "Content-Type" = "application/json",
-      #     "Prefer" = "return=representation"
-      #   ),
-      #   body = body,
-      #   encode = "json"
-      # )
+      body <- jsonlite::toJSON(
+        list(
+          is_connected = FALSE
+        ),
+        auto_unbox = TRUE
+      )
+
+      response <- httr::PATCH(
+        url = paste0(
+          isolate(rv$supabase_url),
+          "/rest/v1/users?",
+          "name=eq.", isolate(rv$current_user$user_name),
+          "&",
+          "token=eq.", isolate(rv$current_user$token)
+        ),
+        httr::add_headers(
+          "apikey" = isolate(rv$supabase_key),
+          "Content-Type" = "application/json",
+          "Prefer" = "return=representation"
+        ),
+        body = body,
+        encode = "json"
+      )
 
     } else {
       rv$users <- data.frame(
