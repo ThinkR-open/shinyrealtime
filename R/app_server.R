@@ -79,6 +79,7 @@ app_server <- function(input, output, session) {
 
       new <- tibble(
         id = input$user_connection_update$new$id,
+        token = input$user_connection_update$new$token,
         is_connected = input$user_connection_update$new$is_connected,
       )
 
