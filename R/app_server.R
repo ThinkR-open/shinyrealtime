@@ -187,7 +187,7 @@ app_server <- function(input, output, session) {
       response <- httr::PATCH(
         url = paste0(
           isolate(rv$supabase_url),
-          "/rest/v1/users?",
+          "/rest/v1/userConnections?",
           "user_name=eq.", isolate(rv$current_user$user_name),
           "&",
           "token=eq.", isolate(rv$current_user$token)
