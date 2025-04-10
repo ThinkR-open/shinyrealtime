@@ -120,7 +120,7 @@ app_server <- function(input, output, session) {
         url = paste0(
           rv$supabase_url,
           "/rest/v1/userConnections?",
-          "name=eq.", rv$current_user$user_name,
+          "user_name=eq.", rv$current_user$user_name,
           "&",
           "token=eq.", rv$current_user$token
         ),
@@ -158,7 +158,7 @@ app_server <- function(input, output, session) {
         url = paste0(
           isolate(rv$supabase_url),
           "/rest/v1/users?",
-          "name=eq.", isolate(rv$current_user$user_name),
+          "user_name=eq.", isolate(rv$current_user$user_name),
           "&",
           "token=eq.", isolate(rv$current_user$token)
         ),
