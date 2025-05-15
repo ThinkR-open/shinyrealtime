@@ -55,10 +55,14 @@ mod_navbar_server <- function(id, rv) {
             class = "avatar",
             title = user,
             style = paste0(
-              "background-color: ", random_color, ";"
-            ),
-            substr(user, 1, 1) |>
-              toupper()
+              "background-image: url(",
+              ifelse(
+                user %in% connect_users(),
+                paste0("www/", user, ".jpg"),
+                "'www/user.png'"
+              ),
+              ")"
+            )
           )
         }
       )

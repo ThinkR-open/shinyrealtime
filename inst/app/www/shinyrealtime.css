@@ -14,15 +14,15 @@
    gap: 3px;
 
    .avatar {
-     display: inline-flex;
-     justify-content: center;
-     align-items: center;
-     width: 25px;
-     height: 25px;
-     border-radius: 50%;
-     font-weight: bold;
-     color: #fff;
+     display: inline-block;
+     overflow: hidden;
      cursor: help;
+     width: 35px;
+     height: 35px;
+     border-radius: 35px;
+     background-repeat: no-repeat;
+     background-size: cover;
+     background-position-x: center;
    }
  }
 }
