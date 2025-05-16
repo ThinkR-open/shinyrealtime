@@ -4,7 +4,7 @@ Shiny.addCustomMessageHandler("supabaseConfig", function(config) {
 
   const supabase = window.supabase.createClient(config.url, config.key);
   const userConnections = supabase.channel('public:userConnections')
-  const iris = supabase.channel('public:userConnections')
+  const iris = supabase.channel('public:iris')
 
   userConnections.on('postgres_changes', {
     event: 'INSERT',
