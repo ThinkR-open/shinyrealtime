@@ -3,9 +3,10 @@ Shiny.addCustomMessageHandler("supabaseConfig", function(config) {
   console.log("🔗 Connexion à Supabase WebSocket...");
 
   const supabase = window.supabase.createClient(config.url, config.key);
-  const channel = supabase.channel('public:userConnections')
+  const userConnections = supabase.channel('public:userConnections')
+  const iris = supabase.channel('public:userConnections')
 
-  channel.on('postgres_changes', {
+  userConnections.on('postgres_changes', {
     event: 'INSERT',
     schema: 'public',
     table: 'userConnections'
@@ -14,7 +15,7 @@ Shiny.addCustomMessageHandler("supabaseConfig", function(config) {
     Shiny.setInputValue("user_connection_insert", payload, { priority: "event" });
   })
 
-  channel.on('postgres_changes', {
+  userConnections.on('postgres_changes', {
     event: 'UPDATE',
     schema: 'public',
     table: 'userConnections'
@@ -23,7 +24,18 @@ Shiny.addCustomMessageHandler("supabaseConfig", function(config) {
    Shiny.setInputValue("user_connection_update", payload, { priority: "event" });
   })
 
-  channel.subscribe();
+  userConnections.subscribe();
+
+  iris.on('postgres_changes', {
+    event: 'INSERT',
+    schema: 'public',
+    table: 'iris'
+  }, payload => {
+   console.log('➕ Nouvelle ligne ajoutée', payload);
+   Shiny.setInputValue("iris_insert", payload, { priority: "event" });
+  })
+
+  iris.subscribe();
 });
 
 let timeout;
@@ -42,3 +54,8 @@ document.addEventListener("mousemove", resetTimer);
 document.addEventListener("keydown", resetTimer);
 document.addEventListener("click", resetTimer);
 resetTimer();
+
+
+Shiny.addCustomMessageHandler('closeOffcanvas', function(msg) {
+  $(".offcanvas").offcanvas("hide")
+});

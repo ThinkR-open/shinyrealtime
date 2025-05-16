@@ -3,7 +3,7 @@
 #' @param input,output,session Internal parameters for {shiny}.
 #'     DO NOT REMOVE.
 #' @import shiny
-#' @importFrom dplyr filter pull tibble distinct
+#' @importFrom dplyr filter pull tibble distinct rows_upsert rows_update
 #' @noRd
 app_server <- function(input, output, session) {
 
@@ -170,6 +170,20 @@ app_server <- function(input, output, session) {
         is_first_visit = c(FALSE, FALSE, FALSE)
       )
     }
+  })
+
+  observeEvent(input$iris_insert, {
+    cat_where(whereami())
+
+    new <- as.data.frame(
+      input$iris_insert$new
+    )
+
+    rv$iris <- rows_upsert(
+      rv$iris,
+      new,
+      by = "id"
+    )
   })
 
   session$onSessionEnded(function() {

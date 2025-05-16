@@ -15,6 +15,7 @@ Imports:
     jsonlite,
     reactable,
     shiny,
+    stats,
     whereami
 Suggests: 
     testthat (>= 3.0.0)

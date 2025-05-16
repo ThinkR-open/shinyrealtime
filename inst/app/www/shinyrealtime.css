@@ -27,5 +27,8 @@
  }
 }
 
-
-
+.shiny-notification {
+  background-color: #00891a;
+  padding: 0.5rem !important;
+  color: white;
+}

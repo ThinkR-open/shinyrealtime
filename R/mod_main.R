@@ -49,13 +49,29 @@ mod_main_server <- function(id, rv) {
       rv = rv
     )
 
-    output$table <- renderReactable({
-      reactable::reactable(
-        data = head(iris)
+    observeEvent(TRUE, {
+      cat_where(whereami())
+
+      response <- httr::GET(
+        url = paste0(rv$supabase_url, "/rest/v1/iris"),
+        httr::add_headers(
+          "apikey" = rv$supabase_key,
+          "Content-Type" = "application/json"
+        ),
+        body = body,
+        encode = "json"
       )
+
+      rv$iris <- jsonlite::fromJSON(rawToChar(response$content))
     })
 
-
+    output$table <- renderReactable({
+      reactable(
+        data = rv$iris,
+        defaultSorted = "id",
+        defaultSortOrder = "desc"
+      )
+    })
   })
 }
 
