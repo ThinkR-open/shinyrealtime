@@ -148,7 +148,7 @@ mod_offcanvas_server <- function(id, rv) {
 
       if (response$status_code %in% c(200, 201)) {
         showNotification(
-          "Nouvelle ligne ajoutée",
+          "New raw added!",
           closeButton = FALSE,
           type = "default",
           duration = 3
