@@ -24,7 +24,7 @@ Shiny.addCustomMessageHandler("supabaseConfig", function(config) {
    Shiny.setInputValue("user_connection_update", payload, { priority: "event" });
   })
 
-  /*iris.on('postgres_changes', {
+  iris.on('postgres_changes', {
     event: 'INSERT',
     schema: 'public',
     table: 'iris'
@@ -32,9 +32,9 @@ Shiny.addCustomMessageHandler("supabaseConfig", function(config) {
    console.log('➕ Nouvelle ligne ajoutée', payload);
    Shiny.setInputValue("iris_insert", payload, { priority: "event" });
   })
-*/
+
   userConnections.subscribe();
-/*  iris.subscribe();*/
+  iris.subscribe();
 });
 
 let timeout;
